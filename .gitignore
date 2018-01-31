@@ -99,3 +99,12 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+# 忽略dadtasets
+datasets/fer2013
+
+# 忽略model_best.pth.tar
+*.pth.tar
+
+# 忽略产生的日志文件
+*.log
