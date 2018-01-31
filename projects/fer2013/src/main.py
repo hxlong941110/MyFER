@@ -17,7 +17,7 @@ data_dir = r'../../../datasets/fer2013/'  # 数据集根路径
 resume = r'checkpoint.pth.tar' # 从checkpoint开始
 
 checkpoint_name = 'checkpoint.pth.tar'
-model_savepath = 'models'  # 模型存放路径
+model_savepath = '../models'  # 模型存放路径
 model_savename = 'model_best.pth.tar' # 保存模型名称
 
 batch_size = 128  # mini batch size
@@ -26,7 +26,7 @@ print_freq = 20  # 打印间隔
 start_epoch = 0 # 迭代开始位置
 epochs = 100  # 迭代次数
 
-log_file = 'logs/train.log'
+log_file = '../logs/train.log'
 ## ------------------------------------------------------------------
 
 use_gpu = torch.cuda.is_available()
