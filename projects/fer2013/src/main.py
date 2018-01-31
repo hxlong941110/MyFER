@@ -13,39 +13,43 @@ from utils import AverageMeter, accuracy, save_checkpoint, adjust_learning_rate,
 
 ## -------------------------- 变量 ----------------------------------
 
-data_dir = r'/home/zwx/Datasets/fer2013/'  # 数据集根路径
+data_dir = r'../../../datasets/fer2013/'  # 数据集根路径
 resume = r'checkpoint.pth.tar' # 从checkpoint开始
 
 checkpoint_name = 'checkpoint.pth.tar'
 model_savepath = 'models'  # 模型存放路径
 model_savename = 'model_best.pth.tar' # 保存模型名称
 
-multi_crops = True
-batch_size = 512  # mini batch size
+batch_size = 128  # mini batch size
 print_freq = 20  # 打印间隔
 
 start_epoch = 0 # 迭代开始位置
-epochs = 300  # 迭代次数
+epochs = 100  # 迭代次数
 
-log_file = 'logs/train_fivecrop.log'
+log_file = 'logs/train.log'
 ## ------------------------------------------------------------------
 
 use_gpu = torch.cuda.is_available()
 # if use_gpu:
 # 	gpuid = 0
 # 	torch.cuda.set_device(gpuid)  # 指定GPU ID
-gpu_count = torch.cuda.device_count() # GPU 个数
-
+# gpu_count = torch.cuda.device_count() # GPU 个数
 
 def main():
 	global start_epoch, epochs, log_file
 	best_prec1 = 0.0
 	best_epoch = 0
-	# ---------------------------------- test dataloader ------------------------------------
-	# train_loader1 = mydataloader.trainloader1(os.path.join(data_dir, 'train'), batch_size)
-	# print('train loader mini-batch counts: {}'.format(len(train_loader1)))
-	train_loader2 = mydataloader.trainloader2(os.path.join(data_dir, 'train'), batch_size)
-	print('train loader mini-batch counts: {}'.format(len(train_loader2)))
+	# ---------------------------------- train dataloader (select one of bellow)------------------------------------
+	multi_crops = False
+	train_loader = mydataloader.trainloader1(os.path.join(data_dir, 'train'), batch_size)
+	print('train loader mini-batch counts: {}'.format(len(train_loader)))
+
+	## 数据集是否Five Crop
+	# multi_crops = True
+	# train_loader = mydataloader.trainloader2(os.path.join(data_dir, 'train'), batch_size)
+	# print('train loader mini-batch counts: {}'.format(len(train_loader)))
+
+	# multi_crops = True
 	# train_loader3 = mydataloader.trainloader3(os.path.join(data_dir, 'train'), batch_size)
 	# print('train loader mini-batch counts: {}'.format(len(train_loader3)))
 	# ---------------------------------------------------------------------------------------
@@ -83,7 +87,7 @@ def main():
 	# 打开日志文件记录
 	for epoch in range(start_epoch, epochs):
 		# train for one epoch
-		train(train_loader2, model, criterion, optimizer, epoch, multi_crops)  # 选择需要的trainloader
+		train(train_loader, model, criterion, optimizer, epoch, multi_crops)  # 选择需要的trainloader
 
 		# evaludate on validation set
 		prec1 = validate(val_loader, model, criterion)
